@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PurchasingDeal extends Model
 {
+    use \EloquentFilter\Filterable;
     /**
      * The "type" of the auto-incrementing ID.
      * 

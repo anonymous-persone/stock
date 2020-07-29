@@ -15,9 +15,17 @@ class SellingDealController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sellingDeals = SellingDeal::paginate(config('custom.items_per_page'));
+        $request->validate([
+            'trader_id' => 'exists:traders,id',
+            'boxes_count' => 'integer|min:0',
+            'boxe_price' => 'numeric|min:0',
+            'total_paid' => 'numeric|min:0',
+            'bets' => 'numeric|min:0',
+        ]);
+
+        $sellingDeals = SellingDeal::filter($request->all())->paginate(config('custom.items_per_page'));
 
         return SellingDealResource::collection($sellingDeals);
     }

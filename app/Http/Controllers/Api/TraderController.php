@@ -19,6 +19,10 @@ class TraderController extends Controller
     {
         $request->validate([
             'name' => 'string|max:255',
+            'region_id' => 'exists:regions,id',
+            'phone' => 'digits:11',
+            'money_indebtedness' => 'numeric|min:0',
+            'boxes_indebtedness' => 'integer|min:0',
         ]);
 
         $traders = Trader::filter($request->all())->paginate(config('custom.items_per_page'));

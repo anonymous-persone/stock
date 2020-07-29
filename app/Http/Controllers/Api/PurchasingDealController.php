@@ -15,9 +15,15 @@ class PurchasingDealController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $purchasingDeals = PurchasingDeal::paginate(config('custom.items_per_page'));
+        $request->validate([
+            'seller_name' => 'string|max:255',
+            'boxes_count' => 'integer|min:0',
+            'created_at' => 'date:Y-m-d',
+        ]);
+
+        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'));
 
         return PurchasingDealResource::collection($purchasingDeals);
     }

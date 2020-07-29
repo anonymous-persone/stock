@@ -15,9 +15,14 @@ class RegionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $regions = Region::paginate(config('custom.items_per_page'));
+        $request->validate([
+            'title_en' => 'string|min:5',
+            'title_ar' => 'string|min:5',
+        ]);
+
+        $regions = Region::filter($request->all())->paginate(config('custom.items_per_page'));
 
         return RegionResource::collection($regions);
     }

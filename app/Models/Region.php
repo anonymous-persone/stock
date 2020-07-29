@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Region extends Model
 {
+    use \EloquentFilter\Filterable;
     /**
      * The "type" of the auto-incrementing ID.
      * 

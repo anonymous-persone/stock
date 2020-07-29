@@ -18,4 +18,24 @@ class TraderFilter extends ModelFilter
     {
         return $this->where('name', 'LIKE', "%$name%");
     }
+
+    public function regionId($regionId)
+    {
+        return $this->where('region_id', $regionId);
+    }
+
+    public function phone($phone)
+    {
+        return $this->where('phone', $phone);
+    }
+
+    public function moneyIndebtedness($moneyIndebtedness)
+    {
+        return $this->where('money_indebtedness', $moneyIndebtedness);
+    }
+
+    public function boxesIndebtedness($boxesIndebtedness)
+    {
+        return $this->where('boxes_indebtedness', $boxesIndebtedness);
+    }
 }
