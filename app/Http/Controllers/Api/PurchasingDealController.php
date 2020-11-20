@@ -19,11 +19,15 @@ class PurchasingDealController extends Controller
     {
         $request->validate([
             'seller_name' => 'string|max:255',
-            'boxes_count' => 'integer|min:0',
+            'container_id' => 'exists:containers,id',
+            'content_id' => 'exists:contents,id',
+            'total_containers' => 'integer|min:0',
+            'remaining_containers' => 'integer|min:0',
             'created_at' => 'date:Y-m-d',
+            'order' => 'in:desc,asc',
         ]);
 
-        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'));
+        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'))->groupBy('seller_name');
 
         return PurchasingDealResource::collection($purchasingDeals);
     }
@@ -38,7 +42,10 @@ class PurchasingDealController extends Controller
     {
         $purchasingDeal = PurchasingDeal::create($request->only([
             'seller_name',
-            'boxes_count',
+            'container_id',
+            'content_id',
+            'total_containers',
+            'remaining_containers',
         ]));
 
         return new PurchasingDealResource($purchasingDeal);
@@ -76,7 +83,10 @@ class PurchasingDealController extends Controller
 
         $purchasingDeal->update($request->only([
             'seller_name',
-            'boxes_count',
+            'container_id',
+            'content_id',
+            'total_containers',
+            'remaining_containers',
         ]));
 
         return new PurchasingDealResource($purchasingDeal);

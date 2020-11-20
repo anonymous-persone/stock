@@ -14,6 +14,8 @@ class TraderResource extends Resource
      */
     public function toArray($request)
     {
+        $this->containers;
+        $this->subregion;
         return parent::toArray($request);
     }
 }

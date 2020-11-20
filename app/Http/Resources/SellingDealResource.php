@@ -14,6 +14,7 @@ class SellingDealResource extends Resource
      */
     public function toArray($request)
     {
+        $this->trader;
         return parent::toArray($request);
     }
 }

@@ -25,7 +25,10 @@ class PurchasingDealRequest extends FormRequest
     {
         return [
             'seller_name' => ['required', 'string', 'max:255'],
-            'boxes_count' => ['required', 'integer', 'min:0'],
+            'container_id' => ['required', 'exists:containers,id'],
+            'content_id' => ['required', 'exists:contents,id'],
+            'total_containers' => ['required', 'integer', 'min:0'],
+            'remaining_containers' => ['required', 'integer', 'min:0', 'lte:total_containers'],
         ];
     }
 }

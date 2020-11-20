@@ -16,8 +16,14 @@ class CreatePurchasingDealsTable extends Migration
         Schema::create('purchasing_deals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('seller_name');
-            $table->unsignedInteger('boxes_count');
+            $table->unsignedBigInteger('container_id');
+            $table->unsignedBigInteger('content_id');
+            $table->unsignedInteger('total_containers');
+            $table->unsignedInteger('remaining_containers');
             $table->timestamps();
+
+            $table->foreign('container_id')->references('id')->on('containers')->onDelete('cascade');
+            $table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade');
         });
     }
 

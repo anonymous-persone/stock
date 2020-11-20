@@ -19,13 +19,33 @@ class PurchasingDealFilter extends ModelFilter
         return $this->where('seller_name', 'LIKE', "%$sellerName%");
     }
 
-    public function boxesCount($boxesCount)
+    public function containerId($containerId)
     {
-        return $this->where('boxes_count', $boxesCount);
+        return $this->where('container_id', $containerId);
+    }
+
+    public function contentId($contentId)
+    {
+        return $this->where('content_id', $contentId);
+    }
+
+    public function totalContainers($totalContainers)
+    {
+        return $this->where('total_containers', $totalContainers);
+    }
+
+    public function remainingContainers($remainingContainers)
+    {
+        return $this->where('remaining_containers', $remainingContainers);
     }
 
     public function createdAt($createdAt)
     {
         return $this->whereDate('created_at', $createdAt);
+    }
+
+    public function order($order)
+    {
+        return $this->orderBy('created_at', $order);
     }
 }

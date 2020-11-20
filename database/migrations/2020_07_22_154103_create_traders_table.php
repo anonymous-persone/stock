@@ -15,14 +15,13 @@ class CreateTradersTable extends Migration
     {
         Schema::create('traders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('region_id');
+            $table->unsignedBigInteger('subregion_id');
             $table->string('name');
             $table->string('phone', 20);
             $table->float('money_indebtedness')->unsigned();
-            $table->unsignedInteger('boxes_indebtedness');
             $table->timestamps();
 
-            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
+            $table->foreign('subregion_id')->references('id')->on('subregions')->onDelete('cascade');
         });
     }
 

@@ -27,9 +27,13 @@ Route::prefix('auth')->namespace('Api\Auth')->group(function(){
 
 Route::middleware(['auth:api'])/*->prefix('')*/->namespace('Api')->group(function () {
 	Route::apiResources([
+		'boxes'			        =>'ContainerController',
+		'contents'				=>'ContentController',
 		'regions'				=>'RegionController',
+		'subregions'			=>'SubregionController',
 		'traders'				=>'TraderController',
 		'selling-deals'			=>'SellingDealController',
 		'purchasing-deals'		=>'PurchasingDealController',
+		'collecting-deals'		=>'CollectingDealController',
 	]);
 });

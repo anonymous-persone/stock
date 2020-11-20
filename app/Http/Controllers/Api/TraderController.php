@@ -19,13 +19,23 @@ class TraderController extends Controller
     {
         $request->validate([
             'name' => 'string|max:255',
+            'subregion_id' => 'exists:subregions,id',
             'region_id' => 'exists:regions,id',
             'phone' => 'digits:11',
             'money_indebtedness' => 'numeric|min:0',
-            'boxes_indebtedness' => 'integer|min:0',
+            'overdue_indebtedness' => 'integer|min:0',
         ]);
 
-        $traders = Trader::filter($request->all())->paginate(config('custom.items_per_page'));
+        $traders = Trader::filter($request->all())->orderBy('money_indebtedness', 'desc')->paginate(config('custom.items_per_page'));
+
+        $overdueIndebtedness = $request->overdue_indebtedness;
+        
+        if ($overdueIndebtedness != null)
+            $traders = $traders->filter(function($value, $key) use ($overdueIndebtedness) {
+                return $value->overdue_indebtedness >= $overdueIndebtedness;
+            });
+
+        /*$request->overdue_indebtedness == null ?: $traders = $this->overdueIndebtedness($traders, $request->overdue_indebtedness);*/
 
         return TraderResource::collection($traders);
     }
@@ -39,12 +49,12 @@ class TraderController extends Controller
     public function store(TraderRequest $request)
     {
         $trader = Trader::create($request->only([
-            'region_id',
+            'subregion_id',
             'name',
             'phone',
             'money_indebtedness',
-            'boxes_indebtedness',
         ]));
+        $trader->containers()->sync($request->containers);
 
         return new TraderResource($trader);
     }
@@ -80,12 +90,12 @@ class TraderController extends Controller
             return entityNotFound();
 
         $trader->update($request->only([
-            'region_id',
+            'subregion_id',
             'name',
             'phone',
             'money_indebtedness',
-            'boxes_indebtedness',
         ]));
+        $trader->containers()->sync($request->containers);
 
         return new TraderResource($trader);
     }
@@ -107,4 +117,17 @@ class TraderController extends Controller
 
         return new TraderResource($trader);
     }
+
+    /*public function overdueIndebtedness($traders, $overdueIndebtedness)
+    {
+        return $traders->filter(function($value, $key) use ($overdueIndebtedness) {
+            $sellingDeal = $value->sellingDeals->last();
+            $collectingDeal = $value->collectingDeals->last();
+
+            return $sellingDeal && $collectingDeal ?
+                    $sellingDeal->created_at->diffInDays(
+                        $collectingDeal->created_at
+                    ) == $overdueIndebtedness : 0;
+        });
+    }*/
 }

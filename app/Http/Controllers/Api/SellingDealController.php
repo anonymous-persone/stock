@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SellingDeal;
 use App\Http\Requests\SellingDealRequest;
 use App\Http\Resources\SellingDealResource;
+use App\Models\PurchasingDeal;
 
 class SellingDealController extends Controller
 {
@@ -19,10 +20,16 @@ class SellingDealController extends Controller
     {
         $request->validate([
             'trader_id' => 'exists:traders,id',
-            'boxes_count' => 'integer|min:0',
-            'boxe_price' => 'numeric|min:0',
+            'container_id' => 'exists:containers,id',
+            'content_id' => 'exists:contents,id',
+            'container_count' => 'integer|min:0',
+            'container_price' => 'numeric|min:0',
+            'container_kilos' => 'numeric|min:0',
+            'kilo_price' => 'numeric|min:0',
+            'total_containers_price' => 'numeric|min:0',
             'total_paid' => 'numeric|min:0',
             'bets' => 'numeric|min:0',
+            'created_at' => 'date:Y-m-d',
         ]);
 
         $sellingDeals = SellingDeal::filter($request->all())->paginate(config('custom.items_per_page'));
@@ -40,11 +47,24 @@ class SellingDealController extends Controller
     {
         $sellingDeal = SellingDeal::create($request->only([
             'trader_id',
-            'boxes_count',
-            'boxe_price',
+            'container_id',
+            'content_id',
+            'container_count',
+            'container_price',
+            'container_kilos',
+            'kilo_price',
+            'total_containers_price',
             'total_paid',
+            'total_unpaid',
             'bets',
         ]));
+
+        $sellingDeal->trader->calcIndebtednesses($request->total_unpaid, $request->container_count, $request->container_id, '+');
+
+        PurchasingDeal::where('container_id', $request->container_id)
+                        ->latest('created_at')
+                        ->first()
+                        ->subtractRemainingContainers($request->container_count);
 
         return new SellingDealResource($sellingDeal);
     }
@@ -81,9 +101,15 @@ class SellingDealController extends Controller
 
         $sellingDeal->update($request->only([
             'trader_id',
-            'boxes_count',
-            'boxe_price',
+            'container_id',
+            'content_id',
+            'container_count',
+            'container_price',
+            'container_kilos',
+            'kilo_price',
+            'total_containers_price',
             'total_paid',
+            'total_unpaid',
             'bets',
         ]));
 

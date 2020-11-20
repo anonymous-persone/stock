@@ -25,10 +25,10 @@ class RegionRequest extends FormRequest
     {
         // check if update request or store request
         $id =  $this->region ?? 'NULL';
-
+        
         return [
-            'title_en' => ['required', 'string', 'min:5', "unique:regions,title_en,$id,id,title_ar,$this->title_ar"],
-            'title_ar' => ['required', 'string', 'min:5', "unique:regions,title_ar,$id,id,title_en,$this->title_en"],
+            'title_en' => ['required', 'string', "unique:regions,title_en,$id,id,title_ar,$this->title_ar"],
+            'title_ar' => ['required', 'string', "unique:regions,title_ar,$id,id,title_en,$this->title_en"],
         ];
     }
 }

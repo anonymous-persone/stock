@@ -20,7 +20,10 @@ class RegionController extends Controller
         $request->validate([
             'title_en' => 'string|min:5',
             'title_ar' => 'string|min:5',
+            'selled_at' => 'date:Y-m-d',
         ]);
+
+        Region::$selledAt =  $request->selled_at;
 
         $regions = Region::filter($request->all())->paginate(config('custom.items_per_page'));
 

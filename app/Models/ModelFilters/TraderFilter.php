@@ -13,15 +13,24 @@ class TraderFilter extends ModelFilter
     * @var array
     */
     public $relations = [];
+    
+    protected $drop_id = false;
 
     public function name($name)
     {
         return $this->where('name', 'LIKE', "%$name%");
     }
 
+    public function subregionId($subregionId)
+    {
+        return $this->where('subregion_id', $subregionId);
+    }
+
     public function regionId($regionId)
     {
-        return $this->where('region_id', $regionId);
+        return $this->whereHas('subregion', function($query) use ($regionId) {
+            return $query->where('region_id', $regionId);
+        });
     }
 
     public function phone($phone)
@@ -34,8 +43,13 @@ class TraderFilter extends ModelFilter
         return $this->where('money_indebtedness', $moneyIndebtedness);
     }
 
-    public function boxesIndebtedness($boxesIndebtedness)
+    public function containersTitle($containersTitle)
     {
-        return $this->where('boxes_indebtedness', $boxesIndebtedness);
+        return $this->whereHas('containers', function($query) use ($containersTitle) {
+            return $query->where(function($query){
+                    return $query->where('title_en', 'LIKE', "%$containersTitle%")
+                        ->orWhere('title_ar', 'LIKE', "%$containersTitle%");
+            });
+        });
     }
 }
