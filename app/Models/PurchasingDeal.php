@@ -32,6 +32,8 @@ class PurchasingDeal extends Model
      */
     protected $fillable = ['container_id', 'content_id', 'seller_name', 'total_containers', 'remaining_containers', 'created_at', 'updated_at'];
 
+    protected $with = ['container', 'content'];
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -27,7 +27,10 @@ class PurchasingDealController extends Controller
             'order' => 'in:desc,asc',
         ]);
 
-        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'))->groupBy('seller_name');
+        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'))->groupBy('seller_name')
+        ->mapToGroups(function($v, $k){
+            return [ ['seller_name' => $k, 'data' => $v] ];
+        });
 
         return PurchasingDealResource::collection($purchasingDeals);
     }
