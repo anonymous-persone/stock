@@ -27,9 +27,9 @@ class PurchasingDealController extends Controller
             'order' => 'in:desc,asc',
         ]);
 
-        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'))->groupBy('seller_name')
+        $purchasingDeals = PurchasingDeal::filter($request->all())->paginate(config('custom.items_per_page'))->groupBy('car_number')
         ->mapToGroups(function($v, $k){
-            return [ ['seller_name' => $k, 'data' => $v] ];
+            return [ ['car_number' => $k, 'data' => $v] ];
         });
 
         return PurchasingDealResource::collection($purchasingDeals);
@@ -41,17 +41,21 @@ class PurchasingDealController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PurchasingDealRequest $request)
+    public function store(PurchasingDealRequest $request, PurchasingDeal $purchasingDeal)
     {
-        $purchasingDeal = PurchasingDeal::create($request->only([
-            'seller_name',
-            'container_id',
-            'content_id',
-            'total_containers',
-            'remaining_containers',
-        ]));
+        $lastCar = $purchasingDeal->orderBy('created_at', 'desc')->first();
+        $carNumber = $lastCar ? ++$lastCar->car_number : 1;
+        
+        foreach ($request->data as $key => $value) {
+            $value['car_number'] = $carNumber;
+            $results[] = PurchasingDeal::firstOrCreate([
+                    ['container_id', $value['container_id']],
+                    ['content_id', $value['content_id']],
+                    ['remaining_containers', '!=', 0],
+                ], $value);
+        }
 
-        return new PurchasingDealResource($purchasingDeal);
+        return new PurchasingDealResource($results);
     }
 
     /**

@@ -97,10 +97,10 @@
 -- Dumping data for table `purchasing_deals`
 --
 
-	INSERT INTO `purchasing_deals` (`id`, `seller_name`, `container_id`, `content_id`, `total_containers`, `remaining_containers`, `created_at`, `updated_at`) VALUES
-		(1, 'محمد عبد العاطي', 1, 1, 263, 0, '2020-09-13 23:05:50', '2020-09-14 03:44:51'),
-		(2, 'المعلم رمضان', 1, 1, 269, 0, '2020-09-14 19:18:22', '2020-09-17 21:45:22'),
-		(3, 'ق', 1, 1, 30, 0, '2020-09-24 00:57:04', '2020-10-14 00:19:53');
+	INSERT INTO `purchasing_deals` (`id`, `car_number`, `seller_name`, `container_id`, `content_id`, `total_containers`, `remaining_containers`, `created_at`, `updated_at`) VALUES
+		(1, 1, 'محمد عبد العاطي', 1, 1, 263, 0, '2020-09-13 23:05:50', '2020-09-14 03:44:51'),
+		(2, 2, 'المعلم رمضان', 1, 1, 269, 0, '2020-09-14 19:18:22', '2020-09-17 21:45:22'),
+		(3, 3, 'ق', 1, 1, 30, 0, '2020-09-24 00:57:04', '2020-10-14 00:19:53');
 
 -- --------------------------------------------------------
 

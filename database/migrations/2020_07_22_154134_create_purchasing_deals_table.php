@@ -15,6 +15,7 @@ class CreatePurchasingDealsTable extends Migration
     {
         Schema::create('purchasing_deals', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('car_number');
             $table->string('seller_name');
             $table->unsignedBigInteger('container_id');
             $table->unsignedBigInteger('content_id');

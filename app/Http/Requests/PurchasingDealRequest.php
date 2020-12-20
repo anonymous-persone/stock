@@ -23,12 +23,14 @@ class PurchasingDealRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this->all());
         return [
-            'seller_name' => ['required', 'string', 'max:255'],
-            'container_id' => ['required', 'exists:containers,id'],
-            'content_id' => ['required', 'exists:contents,id'],
-            'total_containers' => ['required', 'integer', 'min:0'],
-            'remaining_containers' => ['required', 'integer', 'min:0', 'lte:total_containers'],
+            'data' => ['required', 'array'],
+            'data.*.seller_name' => ['required', 'string', 'max:255'],
+            'data.*.container_id' => ['required', 'exists:containers,id'],
+            'data.*.content_id' => ['required', 'exists:contents,id'],
+            'data.*.total_containers' => ['required', 'integer', 'min:0'],
+            'data.*.remaining_containers' => ['required', 'integer', 'min:0', 'lte:data.*.total_containers'],
         ];
     }
 }
