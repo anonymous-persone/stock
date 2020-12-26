@@ -62,6 +62,7 @@ class SellingDealController extends Controller
         $sellingDeal->trader->calcIndebtednesses($request->total_unpaid, $request->container_count, $request->container_id, '+');
 
         PurchasingDeal::where('container_id', $request->container_id)
+                        ->where('content_id', $request->content_id)
                         ->latest('created_at')
                         ->first()
                         ->subtractRemainingContainers($request->container_count);
