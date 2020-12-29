@@ -25,9 +25,18 @@ class SellingDealRequest extends FormRequest
     {
         return [
             'trader_id' => ['required', 'exists:traders,id'],
-            'container_id' => ['required', 'exists:purchasing_deals,container_id'],
+            'container_id' => [
+                'required',
+                'exists:purchasing_deals,container_id',
+                'l_car_is:PurchasingDeal,remaining_containers,empty,content_id'
+            ],
             'content_id' => ['required', 'exists:contents,id'],
-            'container_count' => ['required', 'integer', 'min:0', 'lte_DB_field:PurchasingDeal,remaining_containers'],
+            'container_count' => [
+                'required',
+                'integer',
+                'min:0',
+                'lte_DB_field:PurchasingDeal,remaining_containers'
+            ],
             'container_price' => ['required', 'numeric', 'min:0'],
             'container_kilos' => ['required', 'numeric', 'min:0'],
             'kilo_price' => ['required', 'numeric', 'min:0'],
