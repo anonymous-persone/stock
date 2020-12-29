@@ -28,7 +28,7 @@ class SellingDealRequest extends FormRequest
             'container_id' => [
                 'required',
                 'exists:purchasing_deals,container_id',
-                'l_car_is:PurchasingDeal,remaining_containers,empty,content_id'
+                'l_car_is:PurchasingDeal,remaining_containers,empty'
             ],
             'content_id' => ['required', 'exists:contents,id'],
             'container_count' => [
